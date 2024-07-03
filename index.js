@@ -57,7 +57,7 @@ async function run() {
           // const email = req.params.email;
           // console.log('email: ', email)
       const query = req.params.email;
-          const result = await craftsCollection.find(query).toArray();
+          const result = await craftsCollection.find(creator.query).toArray();
     
           res.send(result)
       })
