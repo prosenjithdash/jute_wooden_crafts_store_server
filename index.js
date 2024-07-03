@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const app = express();
 require('dotenv').config();
@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const cors = require('cors');
 const port = process.env.PORT || 12000;
+
 
 // Middleware
 app.use(cors())
@@ -28,23 +29,53 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    //   await client.connect();
+      
+      // Collection Names
+      const craftsCollection = client.db("jute_wooden_crafts_store").collection("crafts");
+
+      // get all crafts for display all crafts
+       app.get('/crafts', async (req, res) => {
+            const result = await craftsCollection.find().toArray();
+            res.send(result);
+       })
+      
+      // get single craft for craftDetails
+      app.get('/crafts/:id',async (req, res) => {
+
+          const id = req.params.id;
+          console.log('ID: ', id)
+          const query = { _id: new ObjectId(id) }
+          const craft = await craftsCollection.findOne(query);
+    
+          res.send(craft)
+      })
+    
+      // post or create craft item
+      app.post('/crafts', async(req, res) => {
+          const newCraft = req.body;
+          console.log('New Craft:', newCraft);
+          const result = await craftsCollection.insertOne(newCraft);
+          res.send(result);
+      });
+
+      
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
- res.send('BD Restaurant Server is running...')
+ res.send('Jute & Wooden Crafts Store Server is running...')
 })
 
 
 app.listen(port, () => {
- console.log(`BD Restaurant Server is running on port ${port}`)
+ console.log(`Jute & Wooden Crafts Store Server is running on port ${port}`)
 })
