@@ -59,16 +59,31 @@ async function run() {
           res.send(craft)
       })
     
-    // get single user added crafts
-    app.get('/myArtCrafts/:email',async (req, res) => {
-
-          // const email = req.params.email;
-          // console.log('email: ', email)
-      const query = req.params.email;
-          const result = await craftsCollection.find(query).toArray();
     
-          res.send(result)
-      })
+    
+    
+    // // get single user added crafts
+    // app.get('/myArtCrafts/:email',async (req, res) => {
+
+    //       // const email = req.params.email;
+    //       // console.log('email: ', email)
+    //   const query = req.params.email;
+    //       const result = await craftsCollection.find(query).toArray();
+    
+    //       res.send(result)
+    // })
+    
+
+
+
+    
+    // get all contest for creator
+     app.get('/myArtCrafts/:email', async (req, res) => {
+            const email = req.params.email
+            const query = {'creator.email': email}
+            const result = await craftsCollection.find(query).toArray()
+            res.send(result)
+        })
     
     
       // post or create craft item
