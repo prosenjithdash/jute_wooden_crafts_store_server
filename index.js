@@ -8,9 +8,17 @@ const cors = require('cors');
 const port = process.env.PORT || 12000;
 
 
-// Middleware
-app.use(cors())
+// middleware
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://localhost:5174','https://jute-wooden-crafts-store-ui.vercel.app'],
+  credentials: true,
+  optionSuccessStatus: 200,
+}
+app.use(cors(corsOptions))
+
 app.use(express.json())
+
+
 
 
 
@@ -57,7 +65,7 @@ async function run() {
           // const email = req.params.email;
           // console.log('email: ', email)
       const query = req.params.email;
-          const result = await craftsCollection.find(creator.query).toArray();
+          const result = await craftsCollection.find(query).toArray();
     
           res.send(result)
       })
