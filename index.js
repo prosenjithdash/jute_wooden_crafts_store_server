@@ -51,6 +51,18 @@ async function run() {
           res.send(craft)
       })
     
+    // get single user added crafts
+    app.get('/myArtCrafts/:email',async (req, res) => {
+
+          // const email = req.params.email;
+          // console.log('email: ', email)
+      const query = req.params.email;
+          const result = await craftsCollection.find(query).toArray();
+    
+          res.send(result)
+      })
+    
+    
       // post or create craft item
       app.post('/crafts', async(req, res) => {
           const newCraft = req.body;
