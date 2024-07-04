@@ -74,9 +74,6 @@ async function run() {
     // })
     
 
-
-
-    
     // get all contest for creator
      app.get('/myArtCrafts/:email', async (req, res) => {
             const email = req.params.email
@@ -87,12 +84,39 @@ async function run() {
     
     
     // Update Craft items
-      app.get('/crafts/:id', async (req, res) => {
+      // put 
+      app.put('/crafts/:id', async (req, res) => {
           const id = req.params.id;
-          const query = { _id: new ObjectId(id) }
-          const result = await craftsCollection.findOne(query);
+
+          const filter = { _id: new ObjectId(id) };
+          
+          const options = { upsert: true };
+          
+          const updatedCraft = req.body;
+          const craft = {
+              $set: {
+                    
+             
+                        
+                    subcategory_Name: updatedCraft.subcategory_Name,
+                    image: updatedCraft.image,
+                    price: updatedCraft.price,
+                    rating: updatedCraft.rating,
+                    item_name: updatedCraft.item_name,
+                    shortdescription: updatedCraft.shortdescription,
+                    customization: updatedCraft.customization,
+                    stockStatus: updatedCraft.stockStatus,
+                    processing_time: updatedCraft.processing_time
+                    
+            },
+          };
+          
+          const result = await craftsCollection.updateOne(filter, craft, options);
+          
           res.send(result);
+
       })
+      
     
     
       // post or create craft item
