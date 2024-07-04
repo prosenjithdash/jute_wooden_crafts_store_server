@@ -83,7 +83,16 @@ async function run() {
             const query = {'creator.email': email}
             const result = await craftsCollection.find(query).toArray()
             res.send(result)
-        })
+     })
+    
+    
+    // Update Craft items
+      app.get('/crafts/:id', async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: new ObjectId(id) }
+          const result = await craftsCollection.findOne(query);
+          res.send(result);
+      })
     
     
       // post or create craft item
